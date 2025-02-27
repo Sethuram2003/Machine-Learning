@@ -1,0 +1,126 @@
+---
+title: "AMS_580_quiz"
+author: "Sethuram Gautham Rajakumar"
+date: "2025-02-19"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r libraries}
+library(dplyr)
+library(caret)
+library(leaps)
+library(MASS)
+```
+
+Q1. Please use the random seed 123 to divide the data into 75% training and 25% testing.
+
+```{r splitting}
+set.seed(123)
+
+ames_data <- read.csv("C:/Users/Sethuram Gautham R/Downloads/Quiz 1 Linear Regression attached files Feb 19, 2025 504 PM/Ames_Housing_Data.csv")
+
+
+if (any(is.na(ames_data))) {
+  ames_data <- na.omit(ames_data)  # Remove rows with missing values
+}
+
+ames_data$CentralAir <- as.factor(ames_data$CentralAir)
+
+train_index <- createDataPartition(ames_data$SalePrice, p = 0.75, list = FALSE)
+train_data <- ames_data[train_index, ]
+test_data <- ames_data[-train_index, ]
+
+```
+
+Q2. Please find the best model using the stepwise variable selection method (based on the BIC criterion)
+using the training data.Please (a) display the coefficients of the fitted model; (b) make prediction on the
+testing data, and report the RMSE and the Coefficient of Determination R.
+
+
+```{r model question 2}
+
+# 2. Stepwise variable selection using BIC criterion
+# Fit the full model
+full_model <- lm(SalePrice ~ ., data = train_data)
+# Perform stepwise selection based on BIC
+stepwise_model <- stepAIC(full_model, direction = "both", trace = FALSE, k = log(nrow(train_data)))
+
+# (a) Display the coefficients of the fitted model
+summary(stepwise_model)
+
+# (b) Make predictions on the testing data and report RMSE and R^2
+stepwise_predictions <- predict(stepwise_model, newdata = test_data)
+stepwise_rmse <- sqrt(mean((test_data$SalePrice - stepwise_predictions)^2))
+stepwise_r2 <- cor(test_data$SalePrice, stepwise_predictions)^2
+
+cat("Stepwise Model RMSE:", stepwise_rmse, "\n")
+cat("Stepwise Model R^2:", stepwise_r2, "\n")
+
+
+```
+
+Q3. Please find the best model using the best subset variable selection method (based on the SSE criterion)
+using the training data. Please (a) display the coefficients of the fitted model; (b) make prediction on the
+testing data, and report the RMSE and the Coefficient of Determination R2
+
+
+```{r question 3}
+
+subset_model <- regsubsets(SalePrice ~ ., data = train_data, nvmax = 20)
+
+best_subset_index <- which.min(summary(subset_model)$bic)
+best_subset_vars <- names(coef(subset_model, id = best_subset_index))[-1]  # Exclude intercept
+
+best_subset_formula <- as.formula(paste("SalePrice ~", paste(best_subset_vars, collapse = " + ")))
+best_subset_model <- lm(best_subset_formula, data = train_data)
+
+cat("\nBest Subset Model Coefficients:\n")
+print(coef(best_subset_model))
+
+best_subset_predictions <- predict(best_subset_model, newdata = test_data)
+
+best_subset_rmse <- sqrt(mean((test_data$SalePrice - best_subset_predictions)^2))
+best_subset_r_squared <- cor(test_data$SalePrice, best_subset_predictions)^2
+
+cat("\nBest Subset Model Performance:\n")
+cat("RMSE:", best_subset_rmse, "\n")
+cat("R^2:", best_subset_r_squared, "\n")
+
+```
+
+Q4. Which model selection method among the 2 we have used above is the best? (a)Please compare the
+BIC of these models using the training data, as well as display these two models so we can see the parameter
+estimators and model goodness of fit measures. (b) Furthermore, please compare the RMSE and R2 of
+these models using the test data. (c) Please discuss any modifications you can do to further improve your
+model(s).
+
+
+
+```{r question 4}
+
+step_bic <- BIC(stepwise_model)
+best_subset_bic <- BIC(best_subset_model)
+
+cat("\nModel Comparison (BIC):\n")
+cat("Stepwise Model BIC:", step_bic, "\n")
+cat("Best Subset Model BIC:", best_subset_bic, "\n")
+
+cat("\nModel Comparison (Test Data):\n")
+cat("Stepwise Model RMSE:", stepwise_rmse, "\n")
+cat("Best Subset Model RMSE:", best_subset_rmse, "\n")
+cat("Stepwise Model R^2:", stepwise_r2, "\n")
+cat("Best Subset Model R^2:", best_subset_r_squared, "\n")
+
+cat("\nPotential Improvements:\n")
+cat("1. Incorporate interaction or polynomial terms to model non-linear relationships.\n")
+cat("2. Apply regularization methods such as Ridge or Lasso regression to address multicollinearity and prevent overfitting.\n")
+cat("3. Perform feature engineering, including log transformations, to handle skewed predictors.\n")
+cat("4. Explore advanced machine learning models like Random Forest or Gradient Boosting for enhanced predictive accuracy.\n")
+
+
+```
