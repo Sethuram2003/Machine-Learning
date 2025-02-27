@@ -1,5 +1,4 @@
 ---
-title: "AMS_580_quiz"
 author: "Sethuram Gautham Rajakumar"
 date: "2025-02-19"
 output: pdf_document
@@ -22,7 +21,7 @@ Q1. Please use the random seed 123 to divide the data into 75% training and 25% 
 ```{r splitting}
 set.seed(123)
 
-ames_data <- read.csv("C:/Users/Sethuram Gautham R/Downloads/Quiz 1 Linear Regression attached files Feb 19, 2025 504 PM/Ames_Housing_Data.csv")
+ames_data <- read.csv("Ames_Housing_Data.csv")
 
 
 if (any(is.na(ames_data))) {
