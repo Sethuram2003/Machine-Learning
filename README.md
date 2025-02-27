@@ -1,11 +1,11 @@
-# 🧠 ML-Algo-Explorer
+# 🧠 Machine-Learning
 
 <div align="center">
   
 ![GitHub stars](https://img.shields.io/github/stars/sethuram2003/Machine-Learning?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/sethuram2003/Machine-Learning?style=social)
 ![GitHub issues](https://img.shields.io/github/issues/sethuram2003/Machine-Learning?color=green)
-![GitHub license](https://img.shields.io/github/license/sethuram2003/Machine-Learning)
+
 
 **A hands-on journey through machine learning algorithms**
 
@@ -75,7 +75,7 @@ Whether you're a beginner taking your first steps in ML or an experienced practi
 ## 📖 Project Structure
 
 ```
-ML-Algo-Explorer/
+Machine-Learning/
 ├── Linear_Regression/
 │   ├── Linear_Regression.Rmd     # Implementation and analysis
 │   └── Ames_Housing_Data.csv     # Dataset used
@@ -104,8 +104,8 @@ Each algorithm folder contains:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/sethuram2003/ML-Algo-Explorer.git
-   cd ML-Algo-Explorer
+   git clone https://github.com/sethuram2003/Machine-Learning.git
+   cd Machine-Learning
    ```
 
 2. Open the R Markdown files in RStudio to run the analyses:
@@ -186,13 +186,6 @@ Contributions are what make the open-source community such an amazing place to l
 - [ ] Create interactive visualizations for algorithm comparison
 - [ ] Add comprehensive documentation for each algorithm
 
----
-
-## 📄 License <a name="license"></a>
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
 
 <div align="center">
   
