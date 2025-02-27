@@ -1,5 +1,4 @@
 ---
-title: "quiz2"
 author: "Sethuram Gautham Rajakumar"
 date: "2025-02-27"
 output: pdf_document
@@ -11,7 +10,7 @@ For the entire dataset, please perform the data cleaning as instructed before; n
 ```{r }
 library(dplyr)
 
-titanic_data <- read.csv("C:/Users/Sethuram Gautham R/Downloads/Quiz 2 Logistic Regression attached files Feb 26, 2025 459 PM/Titanic2.csv")
+titanic_data <- read.csv("Titanic2.csv")
 
 titanic_cleaned <- titanic_data %>%
   select(-PassengerId, -Name, -Ticket, -Cabin)
