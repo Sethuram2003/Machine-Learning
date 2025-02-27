@@ -1,0 +1,128 @@
+---
+title: "quiz2"
+author: "Sethuram Gautham Rajakumar"
+date: "2025-02-27"
+output: pdf_document
+---
+
+1)
+For the entire dataset, please perform the data cleaning as instructed before; namely, exclude the variables PassengerID, Name, Ticket, and Cabin and delete missing values in the variable Age. Please report how many passengers are left after this step.
+
+```{r }
+library(dplyr)
+
+titanic_data <- read.csv("C:/Users/Sethuram Gautham R/Downloads/Quiz 2 Logistic Regression attached files Feb 26, 2025 459 PM/Titanic2.csv")
+
+titanic_cleaned <- titanic_data %>%
+  select(-PassengerId, -Name, -Ticket, -Cabin)
+
+titanic_cleaned <- titanic_cleaned %>%
+  filter(!is.na(Age))
+
+n_passengers <- nrow(titanic_cleaned)
+cat("Number of passengers left after cleaning:", n_passengers, "\n")
+
+str(titanic_cleaned)
+
+
+
+
+
+```
+
+2)
+Please use the "str()" function to examine the variable type in our dataset. Please note that R will recognize a character-valued function as a categorical variable (namely a Factor variable) automatically and therefore you do not need to transform this type of variable. However, you do need to recode the numerical-valued categorical variables using the “as.factor()” function so that R can recognize these as categorical variables. Now, please recode the “Survived” and the “Pclass” variables as factors.
+
+```{r}
+titanic_cleaned <- titanic_cleaned %>%
+  mutate(Survived = as.factor(Survived),
+         Pclass = as.factor(Pclass))
+
+str(titanic_cleaned)
+
+```
+3)
+Now please use the random seed 123 to divide the cleaned data into 80% training and 20% testing.
+
+
+```{r}
+
+set.seed(123)
+
+train_index <- sample(1:nrow(titanic_cleaned), 0.8 * nrow(titanic_cleaned))
+train_data <- titanic_cleaned[train_index, ]
+test_data <- titanic_cleaned[-train_index, ]
+
+```
+
+4)
+Then you shall fit a logistic regression model with all the other 7 predictors using the training data.
+
+
+```{r}
+
+logistic_model <- glm(Survived ~ ., data = train_data, family = binomial)
+
+summary(logistic_model)
+
+
+```
+
+
+5)
+Please use this fitted model based on the training data to predict the response variable “Survived” (whether the subject survived or not) for the testing data. Please generate the confusion matrix, and report:
+
+The overall accuracy;
+
+The sensitivity (that is, the probability a subject is predicted to have survived given that he/she had survived);
+
+The specificity (that is, the probability a subject is predicted to have not survived given that he/she had not survived).
+
+
+
+```{r}
+test_predictions <- predict(logistic_model, test_data, type = "response")
+test_predictions <- ifelse(test_predictions > 0.5, 1, 0)
+
+test_predictions <- as.factor(test_predictions)
+
+confusion_matrix <- table(Predicted = test_predictions, Actual = test_data$Survived)
+confusion_matrix
+
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+cat("Overall Accuracy:", accuracy, "\n")
+
+sensitivity <- confusion_matrix[2, 2] / sum(confusion_matrix[, 2])
+cat("Sensitivity:", sensitivity, "\n")
+
+specificity <- confusion_matrix[1, 1] / sum(confusion_matrix[, 1])
+cat("Specificity:", specificity, "\n")
+
+
+```
+6)
+Now we have recovered the record of additional passengers as follows. Please predict whether these passengers have survived or not.
+
+
+```{r}
+additional_passengers <- data.frame(
+  PassengerId = c(892, 893, 894),
+  Pclass = as.factor(c(3, 1, 2)),
+  Sex = c("male", "female", "male"),
+  Age = c(24, 68, 41),
+  SibSp = c(1, 0, 1),
+  Parch = c(0, 0, 2),
+  Fare = c(8.42, 24.34, 41.93),
+  Embarked = c("Q", "C", "S")
+)
+
+additional_predictions <- predict(logistic_model, additional_passengers, type = "response")
+additional_predictions <- ifelse(additional_predictions > 0.5, "Survived", "Not Survived")
+
+results <- data.frame(
+  PassengerId = additional_passengers$PassengerId,
+  Survival_Prediction = additional_predictions
+)
+
+print(results)
+```
