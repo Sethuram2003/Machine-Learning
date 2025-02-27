@@ -24,15 +24,15 @@ Here’s a list of algorithms currently implemented or planned:
 ### Supervised Learning
 - [x] Linear Regression
 - [x] Logistic Regression
-- [x] Decision Trees
-- [x] Random Forest
-- [x] Support Vector Machines (SVM)
+- [ ] Decision Trees
+- [ ] Random Forest
+- [ ] Support Vector Machines (SVM)
 - [ ] Gradient Boosting (XGBoost, LightGBM)
 - [ ] Neural Networks (MLP, CNN, RNN)
 
 ### Unsupervised Learning
-- [x] K-Means Clustering
-- [x] Principal Component Analysis (PCA)
+- [ ] K-Means Clustering
+- [ ] Principal Component Analysis (PCA)
 - [ ] t-SNE
 - [ ] Gaussian Mixture Models (GMM)
 
